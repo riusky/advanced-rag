@@ -1,133 +1,156 @@
-# Mastering Large Language Models (LLM) with Retrieval Augmented Generation (RAG)
+# 掌握大语言模型（LLM）与检索增强生成（RAG）
 
-This repository includes a set of assets that are used in the above course, which dives
-deeper into the various problems and solutions when building a RAG system in enterprise environments.
+本仓库包含用于企业级 RAG 系统构建课程的配套资源，深入探讨开发过程中遇到的核心问题与解决方案。
 
-The course is available on [edX](https://www.edx.org/learn/computer-science/pragmatic-ai-labs-advanced-rag).
+课程可在 [edX](https://www.edx.org/learn/computer-science/pragmatic-ai-labs-advanced-rag) 学习。
 
-## Simple RAG Flow
+## 基础 RAG 流程
 
 ![Naive RAG](images/Naiive_RAG.png)
 
-## Jupyter Notebooks
+## Jupyter 实验手册
 
-1. [Simple RAG](01_simple_rag.ipynb): This notebook introduces the fundamental concepts and implementation of Retrieval Augmented Generation (RAG). [![Open In SageMaker Studio Lab](https://studiolab.sagemaker.aws/studiolab.svg)](https://studiolab.sagemaker.aws/import/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb) [![Open In Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb) 
-2. [Embedding Model](02_embedding_model.ipynb): This notebook examines the role of embedding models in RAG systems, including their applications and limitations.
-3. [Semantic Chunking](03_semantic_chunking.ipynb): This notebook investigates the process of semantic chunking in RAG systems, focusing on its significance in information retrieval.
-4. [Contextual Retrieval](04_contextual_retrieval.ipynb): This notebook delves into the strategies for contextual retrieval in RAG systems, emphasizing the effective handling of numerical data and tables.
-5. [Reverse Hyde](05_reverse_hyde.ipynb): This notebook explores the Reverse Hyde technique in RAG systems, highlighting its importance in addressing contextual relevance and query ambiguity.
-6. [Hybrid Search](06_hybrid_search.ipynb): This notebook discusses the integration of hybrid search capabilities in RAG systems, encompassing both temporal relevance and multi-lingual support.
-7. [Reranking](07_reranking.ipynb): This notebook discusses the importance of reranking in RAG systems, focusing on techniques to refine the initial retrieval results for more accurate and relevant outputs.
-8. [Multi Modal Retrieval](08_multimodal_pdf.ipynb): This notebook explore the possibilities of retrieval from images and not limited to text. 
+1. [基础 RAG](01_simple_rag.ipynb)：本手册详解检索增强生成（RAG）的核心概念与实现。[![在 SageMaker Studio Lab 中打开](https://studiolab.sagemaker.aws/studiolab.svg)](https://studiolab.sagemaker.aws/import/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb) [![在 Google Colab 中打开](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb)
+2. [嵌入模型](02_embedding_model.ipynb)：解析 RAG 系统中嵌入模型的应用场景与局限性。
+3. [语义分块](03_semantic_chunking.ipynb)：探讨基于语义的文档分块策略对信息检索的优化。
+4. [上下文检索](04_contextual_retrieval.ipynb)：研究表格数据与数值信息的上下文感知检索方案。
+5. [反向 Hyde](05_reverse_hyde.ipynb)：通过反向 Hyde 技术解决查询歧义与上下文脱节问题。
+6. [混合搜索](06_hybrid_search.ipynb)：集成多语言支持与时效性感知的混合搜索方案。
+7. [结果重排](07_reranking.ipynb)：优化检索结果排序提升输出精准度的关键技术。
+8. [多模态检索](08_multimodal_pdf.ipynb)：突破文本限制的图像-文本跨模态检索实践。
 
-## Common Problems in RAG Systems and Their Solutions
+## RAG 系统典型问题与优化方案
 
-The problematic part of a RAG application is usually the retrieval part. The system might retrieve the wrong documents, or only part of them and lead to wrong replies. This is the classical problem in machine learning of the precision-recall-tradeoff.
+检索环节是 RAG 系统的核心痛点，可能因文档匹配偏差导致错误响应，本质上是机器学习中经典的 **精度-召回率权衡问题**。
 
-![Recall Precision Tradeoff](images/Recall_Precision_in_RAG_Diagram.png)
+![召回-精度权衡](images/Recall_Precision_in_RAG_Diagram.png)
 
-The following list of complexity factors in real-life documents can lead to a decrease in overall retrieval accuracy, and the various techniques that can improve the retrieval performance. 
+以下现实场景中的文档复杂性因素会显著影响检索效果，我们提供针对性优化策略：
 
-1. **Long Documents**
-  - Problem: Difficulty in processing and retrieving information from lengthy documents.
-  - Solutions: 
-    - Chunking options
-      - Sentence-based chunking
-      - Paragraph-based chunking
-      - Fixed-size chunking with overlap
-      - Statistical chunking (see: [03_semantic_chunking.ipynb](03_semantic_chunking.ipynb))
-    - Hierarchical retrieval (e.g., parent-child chunks)
-    - Contextual retrieval (see: [05_contextual_retrieval.ipynb](04_contextual_retrieval.ipynb))
+1. **长文档处理**
+   - **痛点**：海量文本导致信息提取困难
+   - **解决方案**：
+     - 智能分块策略
+       - 句子/段落分块
+       - 重叠式固定分块
+       - 统计驱动分块（见：[03_semantic_chunking.ipynb](03_semantic_chunking.ipynb)）
+     - 层级式检索（父子块关联）
+     - 上下文感知检索（见：[04_contextual_retrieval.ipynb](04_contextual_retrieval.ipynb)）
 
-2. **Mismatch Between Questions and Document Formats**
-   - Problem: User queries may not align with the way information is structured in documents.
-   - Solutions:
-     - Hypothetical Document Embeddings (HyDE)
-     - Reverse HyDE (see: [04_reverse_hyde.ipynb](05_reverse_hyde.ipynb))
+2. **查询-文档结构失配**
+   - **痛点**：用户提问方式与文档组织形式不兼容
+   - **解决方案**：
+     - 假设文档嵌入（HyDE）
+     - 反向 HyDE（见：[05_reverse_hyde.ipynb](05_reverse_hyde.ipynb)）
 
-3. **Domain-Specific Jargon**
-   - Problem: General LLMs may struggle with specialized vocabulary.
-   - Solutions:
-     - Incorporating domain-specific embeddings (see: [02_embedding_model.ipynb](02_embedding_model.ipynb))
-     - Hybrid Search (see: [06_hybrid_search.ipynb](06_hybrid_search.ipynb))
-     - Fine-tuning on domain-specific corpora
+3. **领域专业术语**
+   - **痛点**：通用模型难以理解专业术语
+   - **解决方案**：
+     - 领域定制化嵌入（见：[02_embedding_model.ipynb](02_embedding_model.ipynb)）
+     - 混合检索增强（见：[06_hybrid_search.ipynb](06_hybrid_search.ipynb)）
+     - 领域语料微调
 
-4. **Complex Documents**
-   - Problem: Handling documents with complex structures, such as scanned documents, which can be challenging for traditional text-based retrieval methods.
-   - Solutions:
-     - Multi-modal retrieval (see: [07_multimodal_pdf.ipynb](07_multimodal_pdf.ipynb))
-       - Utilizing computer vision techniques to extract information from images and other non-textual elements within documents.
-       - Integrating this information with text-based retrieval methods for a more comprehensive search capability.
+4. **复杂格式文档**
+   - **痛点**：扫描件等非结构化文档的传统检索失效
+   - **解决方案**：
+     - 多模态检索（见：[08_multimodal_pdf.ipynb](08_multimodal_pdf.ipynb)）
+       - 计算机视觉提取图像信息
+       - 多模态数据融合检索
 
-## Advanced RAG System
+## 企业级 RAG 系统架构
 
 ![Advanced RAG](images/Advanced_RAG.png)
 
-## Set Up Local Jupyter
+## 本地开发环境配置
 
-   To set up the project, you have two options: using `uv` or traditional `pip`.
+支持两种依赖管理方式：高性能工具 `uv` 或传统 `pip`。
 
-   **Using [`uv`](https://github.com/astral-sh/uv)**
+**推荐使用 [`uv`](https://github.com/astral-sh/uv)**
 
-  ```shell
-  pip install uv  # Install `uv`
-  uv venv --python cpython-3.12.3-macos-aarch64-none   # Create a virtual environment for MacOS with Apple Silicon
-  source .venv/bin/activate   # Activate the virtual environment.
-  uv pip compile requirements.in --output-file requirements.txt # Compile the project dependencies
-  uv pip install requirements.txt  # Sync the dependencies
-  ```
+### mac 环境
 
-  ![Advanced RAG Setup](images/advanced-rag-setup.gif)
-
-
-  If the virtual environment doesn't find `pip` or other modules:
-  ```shell
-  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py  # get the pip package
-  python3 get-pip.py # Install the pip package
-  pip install ipykernel # Install ipykernel to add the support for Jupyter notebooks to VSC
-  ```
-
-  To execute the notebooks in a [Jupyter lab](https://jupyter.org/install) environment, you need to add the following commands
-  ```shell
-  python3 -m pip install jupyterlab # Install Jupyter Lab and ipykernel to manager kernels for Jupyter
-  python3 -m ipykernel install --user --name=.venv --display-name="Python (.venv)" # Create kernel from the virtual environment
-  jupyter lab
-  ```
-  And select the `Python (.venv)` from the kernel list.
-
-   **Using traditional `pip`**
-
-  1. Create a virtual environment using your preferred method (e.g., `python -m venv myenv`).
-  2. Activate the virtual environment.
-  3. Install the project dependencies using `pip install -r requirements.txt`.
-
-   Note: The `uv` method is recommended for its speed, ease of use and management of project dependencies. However, the traditional `pip` method is also supported for those familiar with it.
-
-## Setup in Google Colab
-
-Follow the link to the first hands-on lab: [![Open In Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb) 
-
-Before the first cells add the following commands
-
+```shell
+pip install uv  # 安装 UV 工具链
+uv venv --python 3.12   # 创建 Python 3.12 虚拟环境（自动识别系统架构）
+source .venv/bin/activate   # 激活虚拟环境
+uv pip compile requirements.in -o requirements.txt  # 依赖解析
+uv pip install -r requirements.txt  # 极速依赖安装
 ```
+
+### windows 环境
+
+```shell
+# 安装 uv
+pip install uv
+
+# 创建虚拟环境（假设 Python 3.12 已安装）
+uv venv --python 3.12
+
+# 激活虚拟环境
+.\.venv\Scripts\activate
+
+# 编译依赖
+uv pip compile requirements.in --output-file requirements.txt
+
+# 安装依赖
+uv pip install -r requirements.txt
+```
+
+ ![Advanced RAG Setup](images/advanced-rag-setup.gif)
+
+ 如果虚拟环境找不到 pip 或其他模块：
+
+ ```shell
+ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py  # 获取 pip 包
+python3 get-pip.py # 安装 pip 包
+pip install ipykernel # 安装 ipykernel 以支持 VSC 中的 Jupyter 笔记本
+```
+
+要在 Jupyter lab 环境中执行笔记本，您需要添加以下命令：
+
+```shell
+python3 -m pip install jupyterlab # 安装 Jupyter Lab 和 ipykernel 以管理 Jupyter 的内核
+python3 -m ipykernel install --user --name=.venv --display-name="Python (.venv)" # 从虚拟环境创建内核
+jupyter lab
+```
+
+然后从内核列表中选择 Python (.venv)。
+
+**使用传统的 `pip`**
+
+1. 使用您喜欢的方法创建虚拟环境（例如，python -m venv myenv）。
+
+2. 激活虚拟环境。
+
+3. 使用 pip install -r requirements.txt 安装项目依赖。
+
+注意：推荐使用 uv 方法，因为它速度快、易于使用且能有效管理项目依赖。然而，传统的 pip 方法也支持熟悉它的用户。
+
+## 在 Google Colab 中设置
+
+点击链接进入第一个实践实验室： [![Open In Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb) 
+
+在第一个单元格之前添加以下命令：
+
+```shell
 !git clone https://github.com/guyernest/advanced-rag.git
 %cd advanced-rag
 !pip install -q -r requirements.txt
 ```
 
-You might need to restart the Colab runtime at the end of the dependencies installation. Remember to change back to the course folder:
+在依赖安装结束时，您可能需要重启 Colab 运行时。记得切换回课程文件夹：
 
-```
+```shell
 %cd advanced-rag
 ```
 
-## Setup in SageMaker Studio Lab
+## 在 SageMaker Studio Lab 中设置
 
-Follow the link to the first hands-on lab: [![Open In SageMaker Studio Lab](https://studiolab.sagemaker.aws/studiolab.svg)](https://studiolab.sagemaker.aws/import/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb)
+点击链接进入第一个实践实验室：[![Open In SageMaker Studio Lab](https://studiolab.sagemaker.aws/studiolab.svg)](https://studiolab.sagemaker.aws/import/github/guyernest/advanced-rag/blob/main/01_simple_rag.ipynb)
 
-Clone the GitHub repository when prompted by the service.
+在服务提示时克隆 GitHub 仓库。
 
-Before the first cells add the following commands:
+在第一个单元格之前添加以下命令：
 
 ```
 %cd advanced-rag
